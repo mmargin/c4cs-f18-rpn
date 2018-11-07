@@ -1,32 +1,35 @@
 #!/usr/bin/env python3
 
-# stack for the calculator
-# tokenize the input
-# need to process tokens
+import operator
 
-def calculate(arg):
-    stack = []
+operators = {
+    '+': operator.add,
+    '-': operator.sub,
+    '*': operator.mul,
+    '/': operator.truediv,
+}
 
-    tokens = arg.split()
-
-    for token in tokens:
+def calculate(myarg):
+    stack = list()
+    for token in myarg.split():
         try:
-            stack.append(int(token))
+            token = int(token)
+            stack.append(token)
         except ValueError:
-            val2 = stack.pop()
-            val1 = stack.pop()
-            if token == '+':
-                result = val1 + val2
-            elif token == '-':
-                reult = val1 - val2
-
-
+            function = operators[token]
+            arg2 = stack.pop()
+            arg1 = stack.pop()
+            result = function(arg1, arg2)
             stack.append(result)
-    return stack[0]
+        print(stack)
+    if len(stack) != 1:
+        raise TypeError("Too many parameters")
+    return stack.pop()
+
 def main():
     while True:
         result = calculate(input("rpn calc> "))
-        print(result)
+        print("Result: ", result)
+
 if __name__ == '__main__':
     main()
-
